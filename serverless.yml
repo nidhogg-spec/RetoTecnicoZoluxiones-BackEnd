@@ -12,12 +12,70 @@ provider:
       Action: 
         - dynamodb:*
       Resource: 
-        - arn:aws:dynamodb:us-west-2:809740043145:table/starWars
+        - arn:aws:dynamodb:us-west-2:809740043145:table/DbStarWars
 functions:
-  LambdaGET:
-    handler: src/controllers/getRequest
-    name: ${sls:stage}--getCharacters
+  getAllCharacters:
+    handler: src/controllers/getRequest.getAllCharacters
+    name: ${sls:stage}--getAllCharacters
     events:
       - httpApi:
           path: '/people'
           method: get
+  SetNewPilot:
+    handler: src/controllers/postRequest.setNewPilot
+    name: ${sls:stage}--SetNewPilot
+    events:
+      - httpApi:
+          path: '/pilot'
+          method: post
+  SetArtificialLife:
+    handler: src/controllers/postRequest.setArtificialLife
+    name: ${sls:stage}--SetArtificialLife
+    events:
+      - httpApi:
+          path: '/artificial'
+          method: post
+  # hello:
+  #   handler: src/handler.hello
+  #   name: ${sls:stage}-test1 # optional, Deployed Lambda name
+  #   events:
+  #     - httpApi:
+  #         path: /
+  #         method: get
+  # createTask:
+  #   handler: src/addTask.insert
+  #   name: ${sls:stage}-addTask # optional, Deployed Lambda name
+  #   events:
+  #     - httpApi:
+  #         path: /task
+  #         method: post
+  # getTask:
+  #   handler: src/getTask.getTask
+  #   name: ${sls:stage}-getTask # optional, Deployed Lambda name
+  #   events:
+  #     - httpApi:
+  #         path: /task
+  #         method: get
+  # getTaskId:
+  #   handler: src/getTask.getTaskId
+  #   name: ${sls:stage}-getTaskId # optional, Deployed Lambda name
+  #   events:
+  #     - httpApi:
+  #         path: /task/{id}
+  #         method: get
+resources:
+  Resources:
+    DbStarWars:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: DbStarWars
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        # ProvisionedThroughput:
+        #   ReadCapacityUnits: 1
+        #   WriteCapacityUnits: 1
+        BillingMode: PAY_PER_REQUEST
