@@ -1,31 +1,43 @@
-const axios = require('axios');
+ const { DynamoDB } = require('aws-sdk'),
+  dynamoDB = new DynamoDB.DocumentClient();
 
-function getRequest(){
-
-  return new Promise((resolve,reject)=>{
-    axios.get('https://swapi.py4e.com/api/people/')
-      .then((response)=>{
-        resolve(response.data)
-      })
-      .catch((err)=>{
-        console.error(err);
-        reject(err);
-      })
-  })
-}
-const getAllCharacters = async (event) =>{
+const getAllData = async (event) =>{
   try {
-    const result = await getRequest()
-    console.log('-----------')
-    console.log(result)
+    const result = await  dynamoDB.scan({
+      TableName: "DbStarWars"
+    }).promise();
+
+    const task = result.Items
     return {
       status: 200,
-      body: result
+      body: task
     }
   } catch (error) {
     console.error(error)
   }
 }
+
+const getElementById = async (event) =>{
+  try {
+    const {id} = event.pathParameters
+    const result = await  dynamoDB.get({
+      TableName: "DbStarWars",
+      Key:{
+        id
+      }
+    }).promise();
+
+    const task = result.Item
+    return {
+      status: 200,
+      body: task
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 module.exports = {
-  getAllCharacters,
+  getAllData,
+  getElementById
 }

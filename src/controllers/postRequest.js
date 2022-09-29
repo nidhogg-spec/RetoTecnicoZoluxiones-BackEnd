@@ -6,6 +6,7 @@ const axios = require('axios'),
 //  { artificial } = require('./models/artificial'),
 
  dynamoDB = new DynamoDB.DocumentClient();
+
 function getPiloInfo(){
   var pilotData = []
   return new Promise((resolve,reject)=>{
@@ -94,7 +95,6 @@ const setNewPilot = async (event) =>{
 const setArtificialLife = async (event) =>{
   try {
     const result = await getArtificialCharacter()
-    console.log(result)
     const artificialLifeData = {
       id,
       specieName: result[0].specie.name,

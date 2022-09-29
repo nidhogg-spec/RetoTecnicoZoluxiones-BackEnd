@@ -14,12 +14,19 @@ provider:
       Resource: 
         - arn:aws:dynamodb:us-west-2:809740043145:table/DbStarWars
 functions:
-  getAllCharacters:
-    handler: src/controllers/getRequest.getAllCharacters
-    name: ${sls:stage}--getAllCharacters
+  getAllData:
+    handler: src/controllers/getRequest.getAllData
+    name: ${sls:stage}--getAllData
     events:
       - httpApi:
           path: '/people'
+          method: get
+  getElementById:
+    handler: src/controllers/getRequest.getElementById
+    name: ${sls:stage}-getElementById
+    events:
+      - httpApi:
+          path: /people/{id}
           method: get
   SetNewPilot:
     handler: src/controllers/postRequest.setNewPilot
