@@ -1,7 +1,7 @@
  const { DynamoDB } = require('aws-sdk'),
   dynamoDB = new DynamoDB.DocumentClient();
 
-const getAllData = async (event) =>{
+const getAllData = async () =>{
   try {
     const result = await  dynamoDB.scan({
       TableName: "DbStarWars"
@@ -14,6 +14,10 @@ const getAllData = async (event) =>{
     }
   } catch (error) {
     console.error(error)
+    return {
+      status: 400,
+      body: "unexpected Error"
+    }
   }
 }
 
@@ -34,6 +38,10 @@ const getElementById = async (event) =>{
     }
   } catch (error) {
     console.error(error)
+    return {
+      status: 400,
+      body: "unexpected Error"
+    }
   }
 }
 
