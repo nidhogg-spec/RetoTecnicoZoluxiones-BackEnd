@@ -1,82 +1,17 @@
 const axios = require('axios'),
  { DynamoDB } = require('aws-sdk'),
- { v4 } = require('uuid'),
- id = v4(),
+  newPilot = require('./models/pilots'),
+  newSpecie = require('./models/artificial'),
 //  { newPilot } = require('./models/pilots'),
 //  { artificial } = require('./models/artificial'),
-
  dynamoDB = new DynamoDB.DocumentClient();
 
-function getPiloInfo(){
-  var pilotData = []
-  return new Promise((resolve,reject)=>{
-    axios.get('https://swapi.py4e.com/api/starships/10/')
-      .then((response)=>{
-        pilotData.push({starship: response.data})
-        axios.get(response.data.pilots[1])
-        .then((response)=>{
-          pilotData.push({pilot:response.data})
-          resolve(pilotData)
-        })
-        .catch((err)=>{
-          console.error(err);
-          reject(err);
-        })
-      })
-      .catch((err)=>{
-        console.error(err);
-        reject(err);
-      })
-  })
-}
 
-function getArtificialCharacter(){
-  var specieData = []
-  return new Promise((resolve,reject)=>{
-    axios.get('https://swapi.py4e.com/api/species/2/')
-      .then((response)=>{
-        specieData.push({specie: response.data})
-        axios.get(response.data.people[1])
-        .then((response)=>{
-          specieData.push({person:response.data})
-          axios.get(response.data.homeworld)
-          .then((response)=>{
-            specieData.push({homeworld:response.data})
-            resolve(specieData)
-          })
-          .catch((err)=>{
-            console.error(err);
-            reject(err);
-          })
-        })
-        .catch((err)=>{
-          console.error(err);
-          reject(err);
-        })
-      })
-      .catch((err)=>{
-        console.error(err);
-        reject(err);
-      })
-  })
-}
 
 const setNewPilot = async (event) =>{
-  try {
-    const result = await getPiloInfo()
-
-    const pilotData = {
-      id,
-      pilotName: result[1].pilot.name,
-      pilotStarship: result[0].starship.name,
-      characteristics: {
-        hair_color: result[1].pilot.hair_color,
-        skin_color: result[1].pilot.skin_color,
-        eye_color: result[1].pilot.eye_color,
-        gender: result[1].pilot.gender
-      },
-      createdAt: Date.now(),
-    }
+  try {  
+    const body = JSON.parse(event.body)
+    const pilotData = await newPilot.newPilot(body.starshipNumber);
 
     await dynamoDB.put({
       TableName: 'DbStarWars',
@@ -89,38 +24,32 @@ const setNewPilot = async (event) =>{
     }
   } catch (error) {
     console.error(error)
+    return {
+      status: 404,
+      body: "Not found"
+    }
   }
 }
 
 const setArtificialLife = async (event) =>{
   try {
-    const result = await getArtificialCharacter()
-    const artificialLifeData = {
-      id,
-      specieName: result[0].specie.name,
-      personName: result[1].person.name,
-      planetName: result[2].homeworld.name,
-      average_lifespan: result[2].homeworld.average_lifespan,
-      characteristics: {
-        hair_color: result[1].person.hair_color,
-        skin_color: result[1].person.skin_color,
-        eye_color: result[1].person.eye_color,
-        gender: result[1].person.gender
-      },
-      createdAt: Date.now(),
-    }
+    const specieData = await newSpecie.newSpecie();
 
     await dynamoDB.put({
       TableName: 'DbStarWars',
-      Item: artificialLifeData
+      Item: specieData
     }).promise()
 
     return {
       status: 200,
-      body: artificialLifeData
+      body: specieData
     }
   } catch (error) {
     console.error(error)
+    return {
+      status: 400,
+      body: "unexpected Error"
+    }
   }
 }
 module.exports = {

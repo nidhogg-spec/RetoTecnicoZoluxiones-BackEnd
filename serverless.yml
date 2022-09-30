@@ -42,34 +42,6 @@ functions:
       - httpApi:
           path: '/artificial'
           method: post
-  # hello:
-  #   handler: src/handler.hello
-  #   name: ${sls:stage}-test1 # optional, Deployed Lambda name
-  #   events:
-  #     - httpApi:
-  #         path: /
-  #         method: get
-  # createTask:
-  #   handler: src/addTask.insert
-  #   name: ${sls:stage}-addTask # optional, Deployed Lambda name
-  #   events:
-  #     - httpApi:
-  #         path: /task
-  #         method: post
-  # getTask:
-  #   handler: src/getTask.getTask
-  #   name: ${sls:stage}-getTask # optional, Deployed Lambda name
-  #   events:
-  #     - httpApi:
-  #         path: /task
-  #         method: get
-  # getTaskId:
-  #   handler: src/getTask.getTaskId
-  #   name: ${sls:stage}-getTaskId # optional, Deployed Lambda name
-  #   events:
-  #     - httpApi:
-  #         path: /task/{id}
-  #         method: get
 resources:
   Resources:
     DbStarWars:
