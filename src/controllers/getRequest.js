@@ -39,8 +39,8 @@ const getElementById = async (event) =>{
   } catch (error) {
     console.error(error)
     return {
-      status: 400,
-      body: "unexpected Error"
+      status: 404,
+      body: "ID does not exist"
     }
   }
 }
