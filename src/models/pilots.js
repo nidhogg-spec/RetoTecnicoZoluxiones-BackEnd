@@ -1,10 +1,11 @@
 const axios = require('axios'),
+  url_pilots = process.env.API_URL_PILOTS,
   { v4 } = require('uuid');
 
 function getPiloInfo(starshipNumber){
   var pilotData = []
   return new Promise((resolve,reject)=>{
-    axios.get(`https://swapi.py4e.com/api/starships/${starshipNumber}/`)
+    axios.get(`${url_pilots}${starshipNumber}/`)
       .then((response)=>{
         const numberPilots = response.data.pilots.length;
         pilotData.push({starship: response.data});

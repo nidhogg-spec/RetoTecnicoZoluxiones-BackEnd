@@ -13,6 +13,9 @@ provider:
         - dynamodb:*
       Resource: 
         - arn:aws:dynamodb:us-west-2:809740043145:table/DbStarWars
+  environment:
+    API_URL_PILOTS: "https://swapi.py4e.com/api/starships/"
+    API_URL_ARTIFICIAL: "https://swapi.py4e.com/api/species/2/"
 functions:
   getAllData:
     handler: src/controllers/getRequest.getAllData

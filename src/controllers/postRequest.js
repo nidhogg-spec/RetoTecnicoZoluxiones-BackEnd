@@ -1,7 +1,7 @@
 const axios = require('axios'),
  { DynamoDB } = require('aws-sdk'),
-  newPilot = require('./models/pilots'),
-  newSpecie = require('./models/artificial'),
+  newPilot = require('../models/pilots'),
+  newSpecie = require('../models/artificial'),
 //  { newPilot } = require('./models/pilots'),
 //  { artificial } = require('./models/artificial'),
  dynamoDB = new DynamoDB.DocumentClient();

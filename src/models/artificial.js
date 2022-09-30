@@ -1,10 +1,11 @@
 const axios = require('axios'),
+  url_artificial = process.env.API_URL_ARTIFICIAL,
  { v4 } = require('uuid');
 
   function getArtificialCharacterInfo(){
     var specieData = []
     return new Promise((resolve,reject)=>{
-      axios.get('https://swapi.py4e.com/api/species/2/')
+      axios.get(url_artificial)
         .then((response)=>{
           const numberPeople = response.data.people.length;
           var random = Math.floor(Math.random() * numberPeople)
@@ -33,6 +34,7 @@ const axios = require('axios'),
         })
     })
   }
+  
   const newSpecie = async () =>{
 
     const result = await getArtificialCharacterInfo()
